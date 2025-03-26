@@ -81,6 +81,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Function to create a participants list
+  function createParticipantsList(participants) {
+    const participantsList = document.createElement("ul");
+    participantsList.className = "participants-list";
+
+    participants.forEach((participant) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = participant;
+      participantsList.appendChild(listItem);
+    });
+
+    return participantsList;
+  }
+
+  // Enhance activity cards with participants section
+  activitiesList.addEventListener("DOMNodeInserted", (event) => {
+    if (event.target.classList.contains("activity-card")) {
+      const activityName = event.target.querySelector("h4").textContent;
+      const participants = activities[activityName]?.participants || [];
+
+      if (participants.length > 0) {
+        const participantsSection = document.createElement("div");
+        participantsSection.className = "participants-section";
+
+        const participantsHeader = document.createElement("h5");
+        participantsHeader.textContent = "Participants:";
+
+        const participantsList = createParticipantsList(participants);
+
+        participantsSection.appendChild(participantsHeader);
+        participantsSection.appendChild(participantsList);
+        event.target.appendChild(participantsSection);
+      }
+    }
+  });
+
   // Initialize app
   fetchActivities();
 });
